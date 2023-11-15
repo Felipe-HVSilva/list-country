@@ -1,4 +1,5 @@
 import { Country } from "@/app/page"
+import Image from "next/image"
 import Link from "next/link"
 
 async function getCountryByName(name: string): Promise<Country> {
@@ -15,6 +16,7 @@ export default async function CountryPage({
   params: { name: string }
 }) {
   const country = await getCountryByName(name)
+  const formatter = Intl.NumberFormat("en", { notation: "compact" })
   return (
     <section className="flex flex-col container">
       <h1 className="text-5xl font-bold text-gray-800 my-16 text-center">
@@ -32,7 +34,7 @@ export default async function CountryPage({
             <b>Continente:</b> {country.region} - {country.subregion}
           </h2>
           <h2 className="font-bold text-xl text-gray-800 mt-3">
-            <b>População:</b> {country.population}
+            <b>População:</b> {formatter.format(country.population)}
           </h2>
           <h2 className="font-bold text-xl text-gray-800 mt-3">
             <b>Línguas faladas:</b> <br />
@@ -46,6 +48,14 @@ export default async function CountryPage({
             ))}
           </h2>
         </section>
+        <div className="relative h-auto w-96 shadow-md">
+          <Image
+            src={country.flags.svg}
+            alt={country.flags.alt}
+            fill
+            className="object-cover"
+          />
+        </div>
       </article>
     </section>
   )
