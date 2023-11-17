@@ -1,4 +1,5 @@
 import { Country } from "@/app/page"
+import CountryCard from "@/components/CountryCard"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -10,12 +11,35 @@ async function getCountryByName(name: string): Promise<Country> {
   return (await response.json())[0]
 }
 
+async function getCountryBordersByName(name: string) {
+  const response = await fetch("https://restcountries.com/v3.1/all")
+  const countries: Country[] = await response.json()
+
+  const country = countries.find(
+    (county: Country) => county.name.common === name
+  )!
+
+  return country.borders?.map((border) => {
+    const borderCountry = countries.find((country) => country.cca3 === border)!
+    return {
+      name: borderCountry.name.common,
+      ptName: borderCountry.translations.por.common,
+      flag: borderCountry.flags.svg,
+      flagAlt: borderCountry.flags.alt,
+    }
+  })
+}
+
 export default async function CountryPage({
   params: { name },
 }: {
   params: { name: string }
 }) {
-  const country = await getCountryByName(name)
+  const country = await getCountryByName(decodeURI(name))!
+  const borderCountries = await getCountryBordersByName(decodeURI(name))!
+
+  console.log(borderCountries)
+
   const formatter = Intl.NumberFormat("en", { notation: "compact" })
   return (
     <section className="flex flex-col container">
@@ -62,6 +86,16 @@ export default async function CountryPage({
           />
         </div>
       </article>
+      <section>
+        <h3 className="mt-12 text-2xl font-semibold text-gray-800">
+          Países que fazem fronteira
+        </h3>
+        <div className="grid-cols-5 grid gap-3 mt-3 w-full">
+          {borderCountries?.map((border) => (
+            <CountryCard key={border.name} {...border} />
+          ))}
+        </div>
+      </section>
     </section>
   )
 }
