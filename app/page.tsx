@@ -1,4 +1,4 @@
-import CoutryCard from "@/components/CoutryCard"
+import CountryCard from "@/components/CountryCard"
 
 export type Country = {
   name: {
@@ -35,7 +35,7 @@ export default async function Home() {
   return (
     <section className="grid grid-cols-5 w-full container gap-2 mt-16">
       {countries.map((country) => (
-        <CoutryCard
+        <CountryCard
           key={country.name.common}
           name={country.name.common}
           flag={country.flags.svg}
