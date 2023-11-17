@@ -10,7 +10,7 @@
   <img alt="License" src="./screen-pais.png">
 </p>
 
-#### Acesse o [link do deploy](https://ignite-shop-ten-steel.vercel.app/),
+#### Acesse o [link do deploy](https://list-country.vercel.app/),
 
 ## 🚀 Tecnologias
 
